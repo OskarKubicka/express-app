@@ -10,6 +10,10 @@ let bodyParser = require('body-parser');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+app.set('view engine', 'ejs');
+
+app.set('views', './views')
+
 app.use(session({
     secret: 'my-secret',
     resave: false,
@@ -40,10 +44,18 @@ app.listen(port, () => {
     console.log(`Example lol app listening on port ${port}`)
 })
 
+app.get('/input', (req, res) => {
+    res.render('input')
+})
 
 app.get('/logged-in', (req, res)=> {
     if(req.session.authenticated){
-        res.sendFile(__dirname + '/views/logged-in.html');
+        const data = {
+            name: "Gustav",
+            style: "color: red"
+        }
+        res.render('logged-in', data)
+       // res.sendFile(__dirname + '/views/html/logged-in.html');
     }else res.redirect('/input')
     
 })
@@ -82,13 +94,18 @@ app.post('/input', (req, res) => {
 // })
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/views/index.html')
+    const data = {
+        title: "Welcome",
+        style: "color: red"
+    }
+    res.render('index', data)
+   // res.sendFile(__dirname + '/views/html/index.html')
 
 })
 
-app.get('/input', (req, res) => {
-    res.sendFile(__dirname + '/views/input.html')
-})
+// app.get('/input', (req, res) => {
+//     res.sendFile(__dirname + '/views/html/input.html')
+// })
 
 // app.get('/nd', (req, res) => {
 //     res.send('response text')
